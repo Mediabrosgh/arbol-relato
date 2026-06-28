@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Árbol del Relato · Mediabros</title>
+<style>
+  :root{
+    --bg:#dfe3ea; --bg2:#e8ebf0; --card:#ffffff; --card2:#f5f7fa;
+    --line:#e2e6ec; --text:#111827; --muted:#6b7280; --muted2:#9ca3af;
+    --celeste:#148BEF; --azul:#0a6dc4; --green:#16a34a; --amber:#f59e0b; --red:#dc2626; --slate:#9ca3af;
+    --grad:linear-gradient(135deg,#148BEF 0%,#0a6dc4 100%);
+    --sh:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.06);
+    --shh:0 10px 26px -12px rgba(16,24,40,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    background-image:radial-gradient(900px 480px at 12% -5%, rgba(20,139,239,.10), transparent 60%),
+      radial-gradient(900px 560px at 95% 0%, rgba(22,163,74,.08), transparent 55%);
+    background-attachment:fixed; padding:0 0 120px;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+
+  header{padding:54px 0 26px;text-align:center}
+  .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:40px;font-weight:800;letter-spacing:-.02em;margin:10px 0 4px}
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .read-hint{color:var(--muted);font-size:14px;margin-top:6px}
+  .read-hint b{color:var(--azul)}
+
+  .trunk-banner{margin:30px auto 8px;max-width:880px;padding:24px 30px;border-radius:20px;
+    background:linear-gradient(135deg,rgba(20,139,239,.10),rgba(22,163,74,.08));
+    border:1px solid rgba(20,139,239,.3);box-shadow:0 18px 40px -22px rgba(20,139,239,.4)}
+  .trunk-banner .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--azul);font-weight:700;margin-bottom:8px}
+  .trunk-banner .promise{font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.35;color:var(--text)}
+  .trunk-banner .promise em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .trunk-banner .fork{margin-top:12px;font-size:13.5px;color:var(--muted);border-top:1px solid rgba(20,139,239,.18);padding-top:12px}
+  .trunk-banner .fork b{color:var(--text)}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+    margin:24px auto 8px;padding:14px 18px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot.idea{background:transparent;border:2px solid var(--slate)}
+  .dot.escrito{background:var(--celeste)}
+  .dot.grabado{background:var(--amber)}
+  .dot.publicado{background:var(--green)}
+  .filters{display:flex;gap:6px;flex-wrap:wrap}
+  .filters button{background:var(--card2);color:var(--muted);border:1px solid var(--line);
+    padding:6px 12px;border-radius:999px;font-size:12.5px;cursor:pointer;font-weight:600;transition:.15s}
+  .filters button:hover{color:var(--text);border-color:var(--celeste)}
+  .filters button.on{background:var(--grad);color:#fff;border-color:transparent}
+
+  .road{position:relative;margin-top:34px;padding-left:46px}
+  .road::before{content:"";position:absolute;left:17px;top:14px;bottom:40px;width:3px;
+    background:linear-gradient(180deg,var(--celeste),var(--green));border-radius:3px;box-shadow:0 0 14px rgba(20,139,239,.3)}
+  .act{position:relative;margin-bottom:18px}
+  .node{position:absolute;left:-37px;top:18px;width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;
+    background:var(--grad);border:3px solid var(--bg);box-shadow:0 0 0 2px rgba(20,139,239,.35);z-index:2}
+  .act-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;transition:.15s;box-shadow:var(--sh)}
+  .act-head:hover{border-color:var(--celeste)}
+  .act.open .act-head{border-color:rgba(20,139,239,.5);border-bottom-left-radius:0;border-bottom-right-radius:0}
+  .act-title{font-size:19px;font-weight:750;letter-spacing:-.01em}
+  .act-sub{flex-basis:100%;color:var(--muted);font-size:13.5px;margin-top:2px}
+  .funnel{font-size:10.5px;font-weight:700;letter-spacing:.12em;padding:3px 9px;border-radius:6px;border:1px solid}
+  .funnel.TOFU{color:#0a6dc4;border-color:rgba(20,139,239,.4);background:rgba(20,139,239,.1)}
+  .funnel.MOFU{color:#0e7490;border-color:rgba(14,116,144,.35);background:rgba(14,116,144,.08)}
+  .funnel.BOFU{color:#15803d;border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.1)}
+  .branch{font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 9px;border-radius:6px;border:1px solid}
+  .branch.tronco{color:#0a6dc4;border-color:rgba(20,139,239,.35);background:rgba(20,139,239,.08)}
+  .branch.copa{color:#15803d;border-color:rgba(22,163,74,.35);background:rgba(22,163,74,.08)}
+  .counts{margin-left:auto;display:flex;gap:9px;align-items:center}
+  .cnt{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .chev{margin-left:4px;color:var(--muted2);transition:.2s;font-size:13px}
+  .act.open .chev{transform:rotate(90deg)}
+  .gapflag{font-size:11px;font-weight:700;color:#b45309;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.4);padding:3px 9px;border-radius:6px}
+
+  .fork-div{margin:6px 0 22px -46px;padding:12px 0 12px 46px;position:relative}
+  .fork-div .ln{font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--green);text-transform:uppercase}
+  .fork-div .ds{font-size:13px;color:var(--muted);margin-top:3px}
+  .fork-div .ds b{color:var(--text)}
+
+  .leaves{display:none;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:11px;
+    padding:16px;background:var(--card2);border:1px solid rgba(20,139,239,.3);border-top:none;border-radius:0 0 16px 16px}
+  .act.open .leaves{display:grid}
+  .leaf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;
+    position:relative;transition:.15s;border-left:3px solid var(--slate);box-shadow:var(--sh)}
+  .leaf:hover{transform:translateY(-2px);border-color:var(--celeste);box-shadow:var(--shh)}
+  .leaf.escrito{border-left-color:var(--celeste)}
+  .leaf.grabado{border-left-color:var(--amber)}
+  .leaf.publicado{border-left-color:var(--green)}
+  .leaf.anchor{box-shadow:0 0 0 1.5px rgba(20,139,239,.35),var(--sh)}
+  .leaf.proposed{border-style:dashed;border-left-style:solid;background:repeating-linear-gradient(135deg,#fff,#fff 10px,#eef2f7 10px,#eef2f7 20px)}
+  .leaf-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .pin{font-size:12px;flex:none}
+  .leaf-id{font-size:11px;font-weight:700;color:var(--muted2);font-variant-numeric:tabular-nums}
+  .leaf-id.link{color:var(--celeste);text-decoration:none;cursor:pointer;border:1px solid rgba(20,139,239,.3);padding:1px 7px;border-radius:6px;background:rgba(20,139,239,.08)}
+  .leaf-id.link:hover{background:rgba(20,139,239,.18);border-color:var(--celeste)}
+  .leaf.proposed .leaf-id{color:var(--green)}
+  .leaf-t{font-size:13.5px;font-weight:600;line-height:1.35;color:var(--text)}
+  .leaf-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+  .tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:#f0f3f7;color:var(--muted);border:1px solid var(--line)}
+  .tag.ang{color:#0a6dc4;border-color:rgba(20,139,239,.35);background:rgba(20,139,239,.08)}
+  .tag.ind{color:#b45309;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.1)}
+  .tag.anchor{color:var(--azul);border-color:rgba(20,139,239,.4);background:rgba(20,139,239,.12)}
+  .tag.prop{color:var(--green);border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.1)}
+  .leaf-note{font-size:11px;color:var(--muted2);margin-top:8px;font-style:italic}
+  .leaf.dim{opacity:.25;filter:grayscale(.6)}
+
+  .howto{margin-top:46px;padding:22px 26px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:13.5px;box-shadow:var(--sh)}
+  .howto b{color:var(--text)}
+  .howto code{background:#eef2f7;padding:2px 6px;border-radius:5px;color:var(--azul);font-size:12.5px}
+  .howto ul{margin:10px 0 0 18px}
+  .howto li{margin:5px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Mediabros · Sistema de contenido</div>
+    <h1>El <span class="g">Árbol del Relato</span></h1>
+    <p class="read-hint">Mismo protagonista que MB Suite (el dueño de empresa). Acá todo apunta a una sola cosa: <b>generar demanda</b>. Tocá el número del guión para abrirlo.</p>
+    <div class="trunk-banner">
+      <div class="lbl">🌳 El tronco · la promesa madre</div>
+      <div class="promise">Desarrollá el marketing digital de tu empresa para <em>generar demanda real</em>.</div>
+      <div class="fork">↳ <b>Actos 1–4 = tronco compartido con MB Suite</b> (el problema + el sistema; mismo mensaje, cambia solo el cierre → contenido reutilizable). <b>Actos 5–7 = copa Mediabros</b>: la ejecución por canal + casos por industria → <b>agendá una llamada con el equipo</b>.</div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="legend">
+      <span class="lg"><span class="dot idea"></span>Idea</span>
+      <span class="lg"><span class="dot escrito"></span>Escrito</span>
+      <span class="lg"><span class="dot grabado"></span>Grabado</span>
+      <span class="lg"><span class="dot publicado"></span>Publicado</span>
+      <span class="lg">📌 = ancla (grabá esto primero)</span>
+      <span class="lg" style="color:var(--celeste)">№ con borde = abre el guión ↗</span>
+      <span class="lg" style="color:#b45309">tag ámbar = industria</span>
+    </div>
+    <div class="filters" id="filters">
+      <button class="on" data-f="all">Todos</button>
+      <button data-f="idea">Ideas</button>
+      <button data-f="escrito">Escritos</button>
+      <button data-f="grabado">Grabados</button>
+      <button data-f="publicado">Publicados</button>
+    </div>
+  </div>
+
+  <div class="road" id="road"></div>
+
+  <div class="howto">
+    <b>Cómo usar este árbol</b>
+    <ul>
+      <li><b>📌 Las anclas primero:</b> cada acto tiene un guión ancla (el que abre el capítulo). Si un acto está flojo, grabá su ancla antes que nada.</li>
+      <li><b>Tocá el número del guión</b> (el del borde) → abre el guión con formato, también desde el celu.</li>
+      <li><b>Tronco compartido (1–4):</b> el problema y el sistema. El mismo guión sirve para Mediabros y MB Suite cambiando el cierre — escribís una vez, alimentás dos marcas.</li>
+      <li><b>La prueba de Mediabros son los casos por industria</b> (Acto 6): números reales. <b>Los demos de MB Suite NO van acá</b> — esos viven en el árbol de MB Suite.</li>
+      <li><b>Hilo conductor obligatorio:</b> toda solución anclada en una industria B2B real (tag ámbar).</li>
+      <li><b>Editar:</b> array <code>ACTS</code> abajo. Campos: <code>st</code>, <code>ang</code>, <code>ind</code>, <code>anchor</code>, <code>file</code>.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+/* hoja: {id, t, eje, int, ang, st, file?, ind?, anchor?, proposed?, note?} */
+const ACTS = [
+  { n:1, name:"Despertar", funnel:"TOFU", branch:"tronco",
+    sub:"Entender tu mercado: cómo compra tu cliente B2B, en qué etapa está tu empresa, qué cambió.",
+    leaves:[
+      {id:"031", file:"2026-06/guion-031-boca-a-boca-toca-techo.md", t:"El boca a boca toca techo: por qué tu empresa ya no puede vivir de referidos", eje:"E1", int:"Dolor", ang:"Problema", st:"escrito", anchor:true, note:"ancla del Despertar: el guión que abre el viaje"},
+      {id:"013", file:"2026-04/guion-013-cuanto-tarda-decision-b2b.md", t:"El ciclo de compra B2B industrial (por qué es largo y qué implica)", eje:"E1", int:"Educación", ang:"Educativo", st:"grabado", ind:"Maquinaria industrial"},
+      {id:"019", file:"2026-05/guion-019-5-etapas-madurez-b2b-educativo.md", t:"Las 5 etapas de madurez de marketing B2B (educativo)", eje:"E2", int:"Educación", ang:"Educativo", st:"escrito"},
+      {id:"020", file:"2026-05/guion-020-5-etapas-madurez-b2b-proceso.md", t:"Las 5 etapas de madurez B2B (recorrido paso a paso)", eje:"E2", int:"Educación", ang:"Proceso", st:"escrito"},
+      {id:"021", file:"2026-05/guion-021-5-etapas-madurez-b2b-problema.md", t:"¿En qué etapa de madurez está tu empresa? (diagnóstico)", eje:"E1", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"025", file:"2026-05/guion-025-recuperemos-nuestro-tiempo.md", t:"Recuperemos nuestro tiempo: foco vs hacer todo a la vez", eje:"E6", int:"Contrarian", ang:"Educativo", st:"escrito"},
+      {id:"027", file:"2026-06/guion-027-marketing-antes-vs-ahora.md", t:"El marketing antes vs ahora (8 cosas que cambiaron)", eje:"E1", int:"Educación", ang:"Educativo", st:"escrito", note:"formato iPad+zoom"},
+    ]},
+  { n:2, name:"El desorden", funnel:"TOFU", branch:"tronco",
+    sub:"Por qué lo que hacés hoy no trae demanda: acciones sueltas, contenido sin paid, métricas de vanidad.",
+    leaves:[
+      {id:"001-alt", file:"2026-04/guion-001-paid-media-vs-contenido.md", t:"Paid media vs contenido: cuál trae demanda de verdad", eje:"E1", int:"Dolor", ang:"Problema", st:"escrito", anchor:true},
+      {id:"007", file:"2026-04/guion-007-paid-media-vs-contenido.md", t:"Paid media vs contenido (otra entrada)", eje:"E1", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"002", file:"2026-04/guion-002-costo-real-del-contenido.md", t:"El costo real del contenido (lo que nadie suma)", eje:"E1", int:"Contrarian", ang:"Contraintuitivo", st:"escrito"},
+      {id:"002-B1", file:"2026-04/guion-002-version-b1-resultado.md", t:"Contenido que junta likes pero no clientes (vanity)", eje:"E1", int:"Dolor", ang:"Resultado", st:"escrito", ind:"Seguridad electrónica"},
+      {id:"002-B2", file:"2026-04/guion-002-version-b2-error-comun.md", t:"El error de medir el contenido por alcance", eje:"E1", int:"Dolor", ang:"Error", st:"escrito", ind:"Maquinaria industrial"},
+      {id:"NUEVO", t:"Probaste Google Ads (o mandaste emails) y no funcionó: no falló el canal, faltó el sistema", eje:"nuevo", int:"Contrarian", ang:"Contraintuitivo", st:"idea", proposed:true, note:"hueco 2→3 · frustración post-intento (validación agentes)"},
+    ]},
+  { n:3, name:"Querer ver claro", funnel:"MOFU", branch:"tronco",
+    sub:"Medición, tiempos y el puente con ventas: qué es un buen lead y cuándo actuar.",
+    leaves:[
+      {id:"012", file:"2026-04/guion-012-lead-no-te-ignoro.md", t:"El lead no te ignoró: lo perdiste a las 42 horas", eje:"E7", int:"Dolor", ang:"Problema", st:"grabado", ind:"Grupos electrógenos", anchor:true},
+      {id:"006", file:"2026-04/guion-006-tiempos-optimizacion-google-ads.md", t:"Cuánto tiempo darle a una campaña de Google Ads antes de tocarla", eje:"E4", int:"Educación", ang:"Error", st:"escrito"},
+      {id:"009", file:"2026-04/guion-009-leads-frios-vs-calientes.md", t:"Leads fríos vs calientes: por qué no todos sirven igual", eje:"E7", int:"Dolor", ang:"Error", st:"escrito", ind:"Equipamiento médico"},
+      {id:"030", file:"2026-06/guion-030-lead-42-horas-nota.md", t:"El lead que tarda 42 horas (nota comentada)", eje:"E7", int:"Dolor", ang:"Problema", st:"escrito", note:"formato nota comentada"},
+    ]},
+  { n:4, name:"El sistema", funnel:"MOFU", branch:"tronco",
+    sub:"El sistema de generación de demanda: los puntos de contacto, el orden de canales, las piezas, el funnel. Cómo se piensa (sirve para vos o para tu agencia).",
+    leaves:[
+      {id:"011", file:"2026-04/guion-011-ciclo-compra-siete-veces.md", t:"Los 7 puntos de contacto antes de que te compren", eje:"E1", int:"Educación", ang:"Educativo", st:"grabado", ind:"Packaging cosmética", anchor:true},
+      {id:"022", file:"2026-05/guion-022-orden-canales-marketing-digital.md", t:"El orden para activar tus canales (97% no está listo para comprar)", eje:"E1", int:"Educación", ang:"Proceso", st:"escrito"},
+      {id:"023", file:"2026-05/guion-023-sistema-15-piezas-marketing-digital.md", t:"El sistema de 15 piezas del marketing digital", eje:"E1", int:"Educación", ang:"Proceso", st:"escrito"},
+      {id:"024", file:"2026-05/guion-024-funnel-f1-ciclo-venta.md", t:"El funnel como una vuelta de F1 (5 sectores)", eje:"E1", int:"Educación", ang:"Proceso", st:"escrito", note:"fondo animado"},
+      {id:"008", file:"2026-04/guion-008-como-generar-leads-b2b.md", t:"Cómo generar leads B2B: los 5 canales", eje:"E1", int:"Educación", ang:"Educativo", st:"escrito"},
+      {id:"015", file:"2026-05/guion-015-recorrido-marketing-digital.md", t:"El recorrido en 3 etapas para implementar marketing", eje:"E2", int:"Educación", ang:"Proceso", st:"escrito"},
+      {id:"002-B3", file:"2026-04/guion-002-version-b3-proceso.md", t:"El costo del contenido, bien calculado", eje:"E1", int:"Educación", ang:"Proceso", st:"escrito", ind:"Equip. gastronómico"},
+    ]},
+  { n:5, name:"Ejecución por canal", funnel:"MOFU", branch:"copa",
+    sub:"Cómo se ejecuta cada pieza del sistema: LinkedIn, Meta, Google, SEO con IA, landing. Lo que tu agencia opera por vos.",
+    leaves:[
+      {id:"017", file:"2026-05/guion-017-analizando-google-paneles-solares.md", t:"Analizando Google Ads — Paneles solares (Serie cap. 1)", eje:"E4", int:"Contrarian", ang:"Contraintuitivo", st:"escrito", ind:"Paneles solares", anchor:true},
+      {id:"018", file:"2026-05/guion-018-analizando-meta-paneles-solares.md", t:"Analizando Meta Ads — Paneles solares (Serie cap. 1)", eje:"E4", int:"Contrarian", ang:"Contraintuitivo", st:"escrito", ind:"Paneles solares"},
+      {id:"005", file:"2026-04/guion-005-linkedin-ads-leads-b2b.md", t:"LinkedIn Ads B2B: 3 claves", eje:"E4", int:"Educación", ang:"Educativo", st:"escrito", ind:"Mantenimiento industrial"},
+      {id:"029", file:"2026-06/guion-029-landing-que-convierte.md", t:"La landing B2B que convierte (6 bloques)", eje:"E4", int:"Dolor", ang:"Problema", st:"escrito", note:"mockup iPad+zoom"},
+      {id:"028", file:"2026-06/guion-028-busquedas-con-ia-google.md", t:"Cómo aparecer en las búsquedas con IA de Google", eje:"E4", int:"Educación", ang:"Educativo", st:"escrito"},
+      {id:"026", file:"2026-05/guion-026-meta-ads-creatividades-presupuesto.md", t:"Meta Ads: 30 creatividades vs 3-4 (el mito del volumen)", eje:"E6", int:"Contrarian", ang:"Educativo", st:"escrito"},
+      {id:"016", file:"2026-05/guion-016-campana-generica-vs-especifica.md", t:"Una campaña genérica vs 5 específicas", eje:"E5", int:"Autoridad", ang:"Contraintuitivo", st:"escrito", ind:"Logística intl"},
+    ]},
+  { n:6, name:"La prueba real", funnel:"BOFU", branch:"copa",
+    sub:"Resultados reales, anonimizados, con números. El diferencial que MB Suite no tiene.",
+    leaves:[
+      {id:"014", file:"2026-04/guion-014-logistica-caso-real.md", t:"Logística internacional: 64 cotizaciones (CTR 6,57%)", eje:"E5", int:"Autoridad", ang:"Resultado", st:"grabado", ind:"Logística · MX", anchor:true},
+      {id:"001", file:"2026-04/guion-001-embalaje-caso-real.md", t:"Embalaje: 217 cotizaciones en 30 días", eje:"E5", int:"Autoridad", ang:"Resultado", st:"escrito", ind:"Embalaje · MX"},
+      {id:"004", file:"2026-04/guion-004-muebles-oficina-caso-real.md", t:"Muebles de oficina: 179 pedidos de presupuesto", eje:"E5", int:"Autoridad", ang:"Resultado", st:"escrito", ind:"Muebles oficina · MX"},
+      {id:"R-manuf", t:"Caso industria manufacturera (Google + Meta)", eje:"E5", int:"Autoridad", ang:"Resultado", st:"idea", ind:"Manufactura", proposed:true, note:"prioridad: el BOFU necesita más prueba (validación agentes)"},
+      {id:"R-saas", t:"Caso SaaS B2B con LinkedIn Ads", eje:"E5", int:"Autoridad", ang:"Resultado", st:"idea", ind:"Software B2B", proposed:true, note:"prioridad: el BOFU necesita más prueba"},
+      {id:"R-constr", t:"Caso empresa de construcción (Google)", eje:"E5", int:"Autoridad", ang:"Resultado", st:"idea", ind:"Construcción", proposed:true, note:"prioridad: el BOFU necesita más prueba"},
+    ]},
+  { n:7, name:"Elegir bien con quién", funnel:"BOFU", branch:"copa",
+    sub:"Cómo elegir el equipo correcto: especializada vs genérica, qué exigir, qué esperar. → agendá una llamada.",
+    leaves:[
+      {id:"003", file:"2026-04/guion-003-agencia-generica-vs-especializada.md", t:"Agencia genérica vs especializada en tu industria", eje:"E3", int:"Dolor", ang:"Problema", st:"escrito", anchor:true},
+      {id:"010", file:"2026-04/guion-010-como-elegir-agencia.md", t:"Cómo elegir agencia: 5 criterios", eje:"E3", int:"Educación", ang:"Educativo", st:"escrito"},
+      {id:"F-caminos", t:"Los 5 caminos para implementar tu marketing (interno / consultor / agencia / híbrido / equipo propio)", eje:"E2", int:"Educación", ang:"Educativo", st:"idea"},
+      {id:"G-medir", t:"Cómo saber si tu agencia te está funcionando (y cuándo cambiar)", eje:"E3", int:"Educación", ang:"Educativo", st:"idea"},
+      {id:"NUEVO", t:"Qué esperar en los primeros 90 días con una agencia especializada", eje:"E3", int:"Educación", ang:"Educativo", st:"idea", proposed:true, note:"objeción de cierre (validación agentes)"},
+    ]},
+];
+
+const ORDER = {idea:0, escrito:1, grabado:2, publicado:3};
+function leafCard(l){
+  const idHtml = l.file
+    ? `<a class="leaf-id link" href="${l.file.replace(/\.md$/,'.html')}" target="_blank" rel="noopener" title="Abrir el guión">${l.id} ↗</a>`
+    : `<span class="leaf-id">${l.id}</span>`;
+  const tags = [`<span class="tag">${l.eje}</span>`, `<span class="tag">${l.int}</span>`];
+  if(l.ang) tags.push(`<span class="tag ang">${l.ang}</span>`);
+  if(l.ind) tags.push(`<span class="tag ind">${l.ind}</span>`);
+  if(l.anchor) tags.push(`<span class="tag anchor">📌 ancla</span>`);
+  if(l.proposed) tags.push(`<span class="tag prop">▦ propuesta</span>`);
+  return `<div class="leaf ${l.st} ${l.proposed?'proposed':''} ${l.anchor?'anchor':''}" data-st="${l.st}">
+    <div class="leaf-top"><span class="dot ${l.st}"></span>${l.anchor?'<span class="pin">📌</span>':''}${idHtml}</div>
+    <div class="leaf-t">${l.t}</div>
+    <div class="leaf-tags">${tags.join('')}</div>
+    ${l.note?`<div class="leaf-note">↳ ${l.note}</div>`:''}
+  </div>`;
+}
+function countDots(leaves){
+  const c={idea:0,escrito:0,grabado:0,publicado:0}; leaves.forEach(l=>c[l.st]++);
+  return `${c.publicado?`<span class="cnt"><span class="dot publicado"></span>${c.publicado}</span>`:''}
+    ${c.grabado?`<span class="cnt"><span class="dot grabado"></span>${c.grabado}</span>`:''}
+    ${c.escrito?`<span class="cnt"><span class="dot escrito"></span>${c.escrito}</span>`:''}
+    ${c.idea?`<span class="cnt"><span class="dot idea"></span>${c.idea}</span>`:''}`;
+}
+
+const road = document.getElementById('road');
+let prevBranch = null;
+ACTS.forEach((a,i)=>{
+  if(prevBranch==='tronco' && a.branch==='copa'){
+    const d = document.createElement('div'); d.className='fork-div';
+    d.innerHTML = `<div class="ln">⌥ acá el relato se bifurca</div><div class="ds">Esta es la <b>copa Mediabros</b>: la ejecución por canal + los casos reales → el cierre es "lo hacés con nuestro equipo".</div>`;
+    road.appendChild(d);
+  }
+  prevBranch = a.branch;
+  const real = a.leaves.filter(l=>l.st!=='idea').length;
+  const gap = real < 2;
+  const el = document.createElement('div');
+  el.className = `act ${i===0?'open':''}`;
+  el.innerHTML = `
+    <div class="node">${a.n}</div>
+    <div class="act-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="act-title">${a.name}</span>
+      <span class="funnel ${a.funnel}">${a.funnel}</span>
+      <span class="branch ${a.branch}">${a.branch==='tronco'?'🤝 tronco compartido':'🌿 copa Mediabros'}</span>
+      ${gap?`<span class="gapflag">⚠ casi vacío</span>`:''}
+      <span class="act-sub">${a.sub}</span>
+      <span class="counts">${countDots(a.leaves)}<span class="chev">▶</span></span>
+    </div>
+    <div class="leaves">${[...a.leaves].sort((x,y)=>(y.anchor?1:0)-(x.anchor?1:0)||ORDER[y.st]-ORDER[x.st]).map(leafCard).join('')}</div>`;
+  road.appendChild(el);
+});
+document.getElementById('filters').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#filters button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  const f = b.dataset.f;
+  document.querySelectorAll('.leaf').forEach(l=>l.classList.toggle('dim', f!=='all' && l.dataset.st!==f));
+  if(f!=='all') document.querySelectorAll('.act').forEach(a=>a.classList.add('open'));
+});
+</script>
+</body>
+</html>

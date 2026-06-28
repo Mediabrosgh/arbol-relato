@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Árbol del Relato · MB Suite</title>
+<style>
+  :root{
+    --bg:#070b16; --bg2:#0c1226; --card:#111a32; --card2:#0e1730;
+    --line:#1e2b4d; --text:#e8edf9; --muted:#8a97b8; --muted2:#5d6b8f;
+    --blue:#3b82f6; --violet:#8b5cf6; --amber:#f59e0b; --green:#22c55e; --slate:#64748b;
+    --grad:linear-gradient(135deg,#3b82f6 0%,#8b5cf6 100%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    background-image:
+      radial-gradient(900px 500px at 12% -5%, rgba(59,130,246,.14), transparent 60%),
+      radial-gradient(900px 600px at 95% 0%, rgba(139,92,246,.13), transparent 55%);
+    background-attachment:fixed; padding:0 0 120px;
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+
+  header{padding:54px 0 26px;text-align:center}
+  .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:40px;font-weight:800;letter-spacing:-.02em;margin:10px 0 4px}
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .read-hint{color:var(--muted);font-size:14px;margin-top:6px}
+
+  .trunk-banner{margin:30px auto 8px;max-width:840px;padding:26px 30px;border-radius:20px;
+    background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(139,92,246,.14));
+    border:1px solid rgba(139,92,246,.32);position:relative;overflow:hidden;
+    box-shadow:0 20px 50px -20px rgba(59,130,246,.4)}
+  .trunk-banner .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:8px}
+  .trunk-banner .promise{font-size:23px;font-weight:700;letter-spacing:-.01em;line-height:1.35}
+  .trunk-banner .promise em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+    margin:24px auto 8px;padding:14px 18px;border-radius:14px;background:var(--card2);border:1px solid var(--line)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot.idea{background:transparent;border:2px solid var(--slate)}
+  .dot.escrito{background:var(--blue)}
+  .dot.grabado{background:var(--amber)}
+  .dot.publicado{background:var(--green)}
+  .filters{display:flex;gap:6px;flex-wrap:wrap}
+  .filters button{background:var(--card);color:var(--muted);border:1px solid var(--line);
+    padding:6px 12px;border-radius:999px;font-size:12.5px;cursor:pointer;font-weight:600;transition:.15s}
+  .filters button:hover{color:var(--text);border-color:#34467a}
+  .filters button.on{background:var(--grad);color:#fff;border-color:transparent}
+
+  .road{position:relative;margin-top:34px;padding-left:46px}
+  .road::before{content:"";position:absolute;left:17px;top:14px;bottom:40px;width:3px;
+    background:linear-gradient(180deg,var(--blue),var(--violet));border-radius:3px;box-shadow:0 0 16px rgba(99,102,241,.5)}
+  .act{position:relative;margin-bottom:18px}
+  .node{position:absolute;left:-37px;top:18px;width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;
+    background:var(--grad);border:3px solid var(--bg);box-shadow:0 0 0 2px rgba(139,92,246,.4);z-index:2}
+  .act-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;transition:.15s}
+  .act-head:hover{border-color:#34467a}
+  .act.open .act-head{border-color:rgba(139,92,246,.45);border-bottom-left-radius:0;border-bottom-right-radius:0}
+  .act-title{font-size:19px;font-weight:750;letter-spacing:-.01em}
+  .act-sub{flex-basis:100%;color:var(--muted);font-size:13.5px;margin-top:2px}
+  .funnel{font-size:10.5px;font-weight:700;letter-spacing:.12em;padding:3px 9px;border-radius:6px;border:1px solid}
+  .funnel.TOFU{color:#7dd3fc;border-color:rgba(125,211,252,.4);background:rgba(125,211,252,.08)}
+  .funnel.MOFU{color:#c4b5fd;border-color:rgba(196,181,253,.4);background:rgba(196,181,253,.08)}
+  .funnel.BOFU{color:#86efac;border-color:rgba(134,239,172,.4);background:rgba(134,239,172,.08)}
+  .counts{margin-left:auto;display:flex;gap:9px;align-items:center}
+  .cnt{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .chev{margin-left:4px;color:var(--muted2);transition:.2s;font-size:13px}
+  .act.open .chev{transform:rotate(90deg)}
+  .gapflag{font-size:11px;font-weight:700;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);padding:3px 9px;border-radius:6px}
+
+  .leaves{display:none;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:11px;
+    padding:16px;background:var(--card2);border:1px solid rgba(139,92,246,.45);border-top:none;border-radius:0 0 16px 16px}
+  .act.open .leaves{display:grid}
+  .leaf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;
+    position:relative;transition:.15s;border-left:3px solid var(--slate)}
+  .leaf:hover{transform:translateY(-2px);border-color:#34467a}
+  .leaf.escrito{border-left-color:var(--blue)}
+  .leaf.grabado{border-left-color:var(--amber)}
+  .leaf.publicado{border-left-color:var(--green)}
+  .leaf.anchor{box-shadow:0 0 0 1.5px rgba(167,139,250,.5)}
+  .leaf.proposed{border-style:dashed;border-left-style:solid;background:repeating-linear-gradient(135deg,var(--card),var(--card) 10px,#0f1830 10px,#0f1830 20px)}
+  .leaf-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .pin{font-size:12px;flex:none}
+  .leaf-id{font-size:11px;font-weight:700;color:var(--muted2);font-variant-numeric:tabular-nums}
+  .leaf-id.link{color:#a78bfa;text-decoration:none;cursor:pointer;border:1px solid rgba(167,139,250,.3);padding:1px 7px;border-radius:6px;background:rgba(167,139,250,.08)}
+  .leaf-id.link:hover{background:rgba(167,139,250,.18);border-color:rgba(167,139,250,.6)}
+  .leaf.proposed .leaf-id{color:var(--violet)}
+  .leaf-t{font-size:13.5px;font-weight:600;line-height:1.35}
+  .leaf-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+  .tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--line)}
+  .tag.ang{color:#7dd3fc;border-color:rgba(125,211,252,.35);background:rgba(125,211,252,.08)}
+  .tag.demo{color:#34d399;border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.1)}
+  .tag.anchor{color:#a78bfa;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.12)}
+  .tag.prop{color:var(--violet);border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.1)}
+  .leaf-note{font-size:11px;color:var(--muted2);margin-top:8px;font-style:italic}
+  .leaf.dim{opacity:.18;filter:grayscale(.6)}
+
+  .lateral{margin-top:50px;border:1px dashed rgba(139,92,246,.4);border-radius:18px;overflow:hidden;background:rgba(14,23,48,.5)}
+  .lat-head{padding:20px 24px;cursor:pointer;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .lat-badge{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);
+    background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.35);padding:4px 10px;border-radius:7px}
+  .lat-head h2{font-size:21px;font-weight:750;letter-spacing:-.01em}
+  .lat-head p{flex-basis:100%;color:var(--muted);font-size:13.5px;margin-top:2px}
+  .lat-body{display:none;padding:0 24px 24px}
+  .lateral.open .lat-body{display:block}
+  .lat-group{margin-top:18px}
+  .lat-group h3{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .lat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:11px}
+
+  .howto{margin-top:46px;padding:22px 26px;border-radius:16px;background:var(--card2);border:1px solid var(--line);color:var(--muted);font-size:13.5px}
+  .howto b{color:var(--text)}
+  .howto code{background:#0a1020;padding:2px 6px;border-radius:5px;color:#c4b5fd;font-size:12.5px}
+  .howto ul{margin:10px 0 0 18px}
+  .howto li{margin:5px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">MB Suite · Sistema de contenido</div>
+    <h1>El <span class="g">Árbol del Relato</span></h1>
+    <p class="read-hint">Leelo de arriba hacia abajo, como un cuento. Tocá el número del guión para abrirlo y leerlo.</p>
+    <div class="trunk-banner">
+      <div class="lbl">🌳 El tronco · la promesa madre</div>
+      <div class="promise">Desarrollá y manejá el marketing digital de tu empresa <em>—o de varias—</em> sin depender de nadie.</div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="legend">
+      <span class="lg"><span class="dot idea"></span>Idea</span>
+      <span class="lg"><span class="dot escrito"></span>Escrito</span>
+      <span class="lg"><span class="dot grabado"></span>Grabado</span>
+      <span class="lg"><span class="dot publicado"></span>Publicado</span>
+      <span class="lg">📌 = ancla (grabá esto primero)</span>
+      <span class="lg" style="color:#a78bfa">№ con borde = abre el guión ↗</span>
+      <span class="lg" style="color:#34d399">🖥 = demo</span>
+    </div>
+    <div class="filters" id="filters">
+      <button class="on" data-f="all">Todos</button>
+      <button data-f="idea">Ideas</button>
+      <button data-f="escrito">Escritos</button>
+      <button data-f="grabado">Grabados</button>
+      <button data-f="publicado">Publicados</button>
+    </div>
+  </div>
+
+  <div class="road" id="road"></div>
+
+  <div class="lateral" id="lateral">
+    <div class="lat-head" onclick="document.getElementById('lateral').classList.toggle('open')">
+      <span class="lat-badge">↳ La rama "o de varias"</span>
+      <h2>Agencias &amp; freelances</h2>
+      <p>Tu contenido agencia-puro vive acá: no se tira, pero es la rama secundaria. Misma promesa (manejar el marketing sin depender de nadie), aplicada a quien maneja <b>varias</b> empresas. <span style="color:var(--muted2)">Click para abrir/cerrar.</span></p>
+    </div>
+    <div class="lat-body" id="latBody"></div>
+  </div>
+
+  <div class="howto">
+    <b>Cómo usar este árbol</b>
+    <ul>
+      <li><b>📌 Las anclas primero:</b> cada acto tiene un guión ancla (el que abre el capítulo). Si un acto está flojo, grabá su ancla antes que nada.</li>
+      <li><b>Tocá el número del guión</b> (el del borde) → abre el guión con formato, también desde el celu.</li>
+      <li><b>Tres perillas independientes:</b> <b>ACTO</b> = punto del viaje · <b>ÁNGULO</b> = lente (tag azul) · <b>FORMATO</b> = vehículo (🖥 demo, nota comentada…). Una <b>noticia</b> es formato, no acto.</li>
+      <li><b>La prueba de MB Suite son los 🖥 demos</b> ("así se maneja / así lo hago"): el equivalente a los casos de éxito de Mediabros. Se concentran en actos 5 y 6.</li>
+      <li><b>Editar:</b> array <code>ACTS</code> / <code>LATERAL</code> abajo. Campos: <code>st</code>, <code>ang</code>, <code>fmt:"demo"</code>, <code>anchor</code>, <code>file</code>.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+/* hoja: {id, t, eje, int, ang, st, file?, fmt?, anchor?, proposed?, note?} */
+const ACTS = [
+  { n:1, name:"Despertar", funnel:"TOFU",
+    sub:"El marketing de tu empresa no se delega a ciegas. Por qué tenés que involucrarte.",
+    leaves:[
+      {id:"037", file:"2026-06/guion-037-marketing-sin-depender.md", t:"Tu marketing, sin depender de nadie (y por qué ya no es opcional)", eje:"E11", int:"Contrarian", ang:"Opinión", st:"escrito", anchor:true, note:"ancla del Despertar: el guión que abre el viaje"},
+      {id:"005", file:"2026-04/guion-005-marketing-solo.md", t:"El responsable de marketing que hace todo solo", eje:"E11", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"E11-03", t:"Cómo organizar el marketing de tu empresa siendo una sola persona", eje:"E11", int:"Educación", ang:"Proceso", st:"idea"},
+      {id:"IDEA-P", t:"Cada proveedor lleva agua para su molino: por qué necesitás una estrategia multicanal, no un especialista sesgado", eje:"nuevo", int:"Contrarian", ang:"Opinión", st:"idea", note:"idea tuya · jun 2026 · puente al acto 5"},
+      {id:"NUEVO", t:"Lo terceriás todo, pero no lo entendés: ese es el problema", eje:"nuevo", int:"Contrarian", ang:"Opinión", st:"idea", proposed:true},
+    ]},
+  { n:2, name:"La caja negra", funnel:"TOFU",
+    sub:"Qué pasa cuando dependés de alguien que no te muestra: no ves tu plata ni qué se hace.",
+    leaves:[
+      {id:"NUEVO", t:"Dependés de una agencia que no te muestra qué hace con tu plata", eje:"nuevo", int:"Dolor", ang:"Problema", st:"idea", proposed:true, anchor:true, note:"ancla de La caja negra · falta escribirla"},
+      {id:"NUEVO", t:"No sabés en qué se va el presupuesto de tu marketing", eje:"nuevo", int:"Dolor", ang:"Problema", st:"idea", proposed:true},
+      {id:"022→", file:"2026-05/guion-022-operacion-invisible.md", t:"Tu marketing no se nota… hasta que falla", eje:"E7", int:"Dolor", ang:"Problema", st:"idea", proposed:true, note:"reusar guion-022 reencuadrado a empresa"},
+    ]},
+  { n:3, name:"Querer ver claro", funnel:"MOFU",
+    sub:"Medición, números y reportes: qué mirar para tomar las decisiones vos.",
+    leaves:[
+      {id:"030", file:"2026-05/guion-030-looker-conectores.md", t:"Looker Studio y los conectores que nunca cargan", eje:"E7", int:"Dolor", ang:"Problema", st:"escrito", anchor:true},
+      {id:"026", file:"2026-05/guion-026-reportes-dia-uno.md", t:"Antes los reportes tardaban hasta el día 10. Hoy, día 1", eje:"E7", int:"Educación", ang:"Resultado", st:"escrito", note:"reencuadrar de agencia→empresa"},
+      {id:"032", file:"2026-05/guion-032-auto-budget.md", t:"Antes alguien revisaba presupuestos todos los días. Hoy no", eje:"E12", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"E13-02", t:"Los números que nadie te cuenta de tu propio marketing", eje:"E13", int:"Autoridad", ang:"Educativo", st:"idea"},
+      {id:"IDEA-T", t:"Tiempos de referencia: cuánto dejar una campaña antes de tocarla y cuánto darle a una estrategia para probar", eje:"nuevo", int:"Educación", ang:"Educativo", st:"idea", note:"idea tuya · jun 2026 · revive el tema de los descartados 007/008 en clave empresa"},
+    ]},
+  { n:4, name:"La IA a tu favor", funnel:"MOFU",
+    sub:"Cómo usar IA para el marketing de tu empresa — por qué no alcanza suelta, cómo va potenciada en un sistema.",
+    leaves:[
+      {id:"033", file:"2026-05/guion-033-una-ia-no-alcanza.md", t:"Una IA no alcanza. No son iguales (Claude / GPT / Gemini)", eje:"E6", int:"Educación", ang:"Educativo", st:"escrito", anchor:true},
+      {id:"024", file:"2026-05/guion-024-claude-meta-ads-sin-contexto.md", t:"Conectar Claude con Meta Ads no es suficiente: IA sin contexto solo describe", eje:"E5", int:"Contrarian", ang:"Opinión", st:"escrito"},
+      {id:"E6-01", t:"ChatGPT + copiar y pegar datos no escala", eje:"E6", int:"Dolor", ang:"Error", st:"idea"},
+      {id:"E6-04", t:"La IA dentro de tu estrategia, no en paralelo", eje:"E6", int:"Educación", ang:"Educativo", st:"idea"},
+      {id:"E6-07", t:"MB Suite como el lugar donde la IA tiene tu contexto", eje:"E6", int:"Educación", ang:"Educativo", st:"idea"},
+    ]},
+  { n:5, name:"Todo en un solo lugar", funnel:"BOFU",
+    sub:"Paid media, CRM, SEO, redes, email, reportes — sin fricción y sin 10 herramientas. Tu prueba: los 🖥 demos.",
+    leaves:[
+      {id:"014", file:"2026-05/guion-014-cinco-herramientas-vs-una.md", t:"5 herramientas vs 1: el ahorro real ($653/mes)", eje:"E5", int:"Contrarian", ang:"Contraintuitivo", st:"grabado", anchor:true},
+      {id:"demo·24jun", t:"Cómo MB Suite integra marketing con ventas: los leads de Meta entran solos a Prospectos del CRM", eje:"E12", int:"Educación", ang:"Proceso", st:"grabado", fmt:"demo", note:"grabado 24-jun · tu prueba en 1ª persona"},
+      {id:"014v2", file:"2026-05/guion-014-version-b-error-comun.md", t:"El error de pagar una herramienta por cada categoría", eje:"E5", int:"Contrarian", ang:"Error", st:"escrito"},
+      {id:"020", file:"2026-05/guion-020-mas-herramientas-mas-caos.md", t:"Cada herramienta nueva profundiza el caos", eje:"E5", int:"Contrarian", ang:"Opinión", st:"escrito"},
+      {id:"006", file:"2026-04/guion-006-ads-visualizer.md", t:"Ads Visualizer: todos tus anuncios en un solo lugar", eje:"E12", int:"Educación", ang:"Educativo", st:"escrito", fmt:"demo", note:"screen recording"},
+      {id:"demo·social", t:"Así creo y programo todo el contenido con el módulo de Social Media", eje:"E12", int:"Educación", ang:"Proceso", st:"idea", fmt:"demo", note:"idea tuya · demo en 1ª persona"},
+      {id:"E5-01", t:"El costo oculto de tener las herramientas dispersas", eje:"E5", int:"Dolor", ang:"Problema", st:"idea"},
+      {id:"E5-03", t:"El dato que entra una vez y se replica solo", eje:"E5", int:"Educación", ang:"Proceso", st:"idea"},
+    ]},
+  { n:6, name:"Dueño de tu marketing", funnel:"BOFU",
+    sub:"Lo manejás vos, con claridad, sin depender de nadie. → demo + trial de 14 días.",
+    leaves:[
+      {id:"E11-02", t:"No necesitás una agencia: necesitás un sistema", eje:"E11", int:"Contrarian", ang:"Opinión", st:"idea", anchor:true, note:"ancla de Dueño de tu marketing · falta escribirla"},
+      {id:"E11-04", t:"Agencia vs freelance vs hacerlo vos: cuándo cada uno", eje:"E11", int:"Educación", ang:"Educativo", st:"idea"},
+      {id:"NUEVO", t:"Cómo se siente manejar tu marketing con claridad (cierre + demo)", eje:"nuevo", int:"Autoridad", ang:"Resultado", st:"idea", proposed:true},
+    ]},
+];
+
+const LATERAL = [
+  { g:"Escalar la operación", leaves:[
+      {id:"002", file:"2026-04/guion-002-freelance-a-agencia.md", t:"De freelance a agencia: el salto operativo", eje:"E8", int:"Educación", ang:"Proceso", st:"grabado"},
+      {id:"003", file:"2026-04/guion-003-escalar-agencia-tecnologia-v1.md", t:"Escalá tu agencia con tecnología, no con más gente (gancho A)", eje:"E9", int:"Educación", ang:"Educativo", st:"grabado"},
+      {id:"003v2", file:"2026-04/guion-003-escalar-agencia-tecnologia-v2.md", t:"Tres formas de escalar tu agencia (gancho B)", eje:"E9", int:"Educación", ang:"Educativo", st:"escrito"},
+      {id:"demo·cuentas", t:"Así gestiono +50 cuentas con MB Suite", eje:"E12", int:"Educación", ang:"Proceso", st:"idea", fmt:"demo", note:"idea tuya · demo en 1ª persona"},
+  ]},
+  { g:"Activo vs trabajo · pricing", leaves:[
+      {id:"016", file:"2026-05/guion-016-agencia-depende-de-vos.md", t:"Si todo pasa por vos, no tenés una agencia", eje:"E3", int:"Contrarian", ang:"Opinión", st:"escrito"},
+      {id:"019", file:"2026-05/guion-019-cobrar-por-hora.md", t:"La trampa de cobrar por hora", eje:"E3", int:"Contrarian", ang:"Opinión", st:"escrito"},
+      {id:"023", file:"2026-05/guion-023-celebrar-cliente-nuevo.md", t:"Cerrás un cliente y no podés festejar", eje:"E3", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"031", file:"2026-05/guion-031-sistema-operativo-activo.md", t:"Tu agencia no es un activo. Es un trabajo con empleados", eje:"E3", int:"Autoridad", ang:"Opinión", st:"escrito"},
+      {id:"015", file:"2026-05/guion-015-precio-percibido.md", t:"Bajar el precio no retiene. Te enseña a perder", eje:"E7", int:"Contrarian", ang:"Contraintuitivo", st:"escrito"},
+  ]},
+  { g:"Retención · tangibilizar el servicio", leaves:[
+      {id:"001", file:"2026-02/guion-001-cliente-pregunta-como-va.md", t:"El cliente pregunta cómo va (y no tenés la info junta)", eje:"E2", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"011", file:"2026-05/guion-011-tangibilizar-servicio.md", t:"Tus clientes te duran poco: no entienden lo que hacés", eje:"E7", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"021", file:"2026-05/guion-021-profundizar-vs-sumar.md", t:"Sumar clientes sin sistema es perderlos antes", eje:"E7", int:"Contrarian", ang:"Opinión", st:"escrito"},
+      {id:"022", file:"2026-05/guion-022-operacion-invisible.md", t:"Tu operación no se nota hasta que falla", eje:"E7", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"036", file:"2026-05/guion-036-tres-dimensiones-venta.md", t:"Los mejores vendedores venden sensaciones", eje:"E7", int:"Educación", ang:"Opinión", st:"escrito"},
+  ]},
+  { g:"Refutaciones a Hormozi (LATAM)", leaves:[
+      {id:"017", file:"2026-05/guion-017-nichos-latam.md", t:"Anicharte en LATAM no es lo mismo que en USA", eje:"E14", int:"Contrarian", ang:"Refutación", st:"escrito"},
+      {id:"027", file:"2026-05/guion-027-hormozi-premium-latam.md", t:"Hormozi en LATAM: premium pricing se escribió para otro mercado", eje:"E10", int:"Contrarian", ang:"Refutación", st:"escrito"},
+      {id:"028", t:"Los A-players en LATAM duran 6 meses", eje:"E10", int:"Contrarian", ang:"Refutación", st:"idea"},
+      {id:"034", file:"2026-05/guion-034-hormozi-oferta-vs-operacion.md", t:"En LATAM tu oferta está bien. Lo que no aguanta es la operación", eje:"E10", int:"Contrarian", ang:"Refutación", st:"escrito"},
+      {id:"035", file:"2026-05/guion-035-volumen-vs-paso-firme.md", t:"Cuando arrancás, no captes más. Retené lo que entró", eje:"E10", int:"Contrarian", ang:"Refutación", st:"escrito"},
+      {id:"018", file:"2026-05/guion-018-cursos-y-gurues.md", t:"Compraste el curso. Y la operación sigue igual", eje:"E10", int:"Contrarian", ang:"Refutación", st:"escrito"},
+  ]},
+  { g:"Equipo · onboarding · autoridad", leaves:[
+      {id:"004", file:"2026-04/guion-004-consultoria-vs-tecnologia.md", t:"Consultoría vs. Tecnología (20 años de experiencia)", eje:"E10", int:"Autoridad", ang:"Opinión", st:"grabado"},
+      {id:"029", file:"2026-05/guion-029-conocimiento-en-una-persona.md", t:"Se fue un account manager y se fue con el conocimiento", eje:"E4", int:"Dolor", ang:"Problema", st:"escrito"},
+      {id:"025", file:"2026-05/guion-025-onboarding-pack-tareas.md", t:"Así onboardeamos un cliente nuevo sin volvernos locos", eje:"E12", int:"Educación", ang:"Proceso", st:"escrito", fmt:"demo", note:"screen recording"},
+  ]},
+];
+
+const ORDER = {idea:0, escrito:1, grabado:2, publicado:3};
+function leafCard(l){
+  const idHtml = l.file
+    ? `<a class="leaf-id link" href="${l.file.replace(/\.md$/,'.html')}" target="_blank" rel="noopener" title="Abrir el guión">${l.id} ↗</a>`
+    : `<span class="leaf-id">${l.id}</span>`;
+  const tags = [`<span class="tag">${l.eje}</span>`, `<span class="tag">${l.int}</span>`];
+  if(l.ang) tags.push(`<span class="tag ang">${l.ang}</span>`);
+  if(l.fmt==='demo') tags.push(`<span class="tag demo">🖥 demo</span>`);
+  if(l.anchor) tags.push(`<span class="tag anchor">📌 ancla</span>`);
+  if(l.proposed) tags.push(`<span class="tag prop">▦ propuesta</span>`);
+  return `<div class="leaf ${l.st} ${l.proposed?'proposed':''} ${l.anchor?'anchor':''}" data-st="${l.st}">
+    <div class="leaf-top"><span class="dot ${l.st}"></span>${l.anchor?'<span class="pin">📌</span>':''}${idHtml}</div>
+    <div class="leaf-t">${l.t}</div>
+    <div class="leaf-tags">${tags.join('')}</div>
+    ${l.note?`<div class="leaf-note">↳ ${l.note}</div>`:''}
+  </div>`;
+}
+function countDots(leaves){
+  const c={idea:0,escrito:0,grabado:0,publicado:0}; leaves.forEach(l=>c[l.st]++);
+  return `${c.publicado?`<span class="cnt"><span class="dot publicado"></span>${c.publicado}</span>`:''}
+    ${c.grabado?`<span class="cnt"><span class="dot grabado"></span>${c.grabado}</span>`:''}
+    ${c.escrito?`<span class="cnt"><span class="dot escrito"></span>${c.escrito}</span>`:''}
+    ${c.idea?`<span class="cnt"><span class="dot idea"></span>${c.idea}</span>`:''}`;
+}
+
+const road = document.getElementById('road');
+ACTS.forEach((a,i)=>{
+  const real = a.leaves.filter(l=>l.st!=='idea').length;
+  const gap = real < 2;
+  const el = document.createElement('div');
+  el.className = `act ${i===0?'open':''}`;
+  el.innerHTML = `
+    <div class="node">${a.n}</div>
+    <div class="act-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="act-title">${a.name}</span>
+      <span class="funnel ${a.funnel}">${a.funnel}</span>
+      ${gap?`<span class="gapflag">⚠ casi vacío</span>`:''}
+      <span class="act-sub">${a.sub}</span>
+      <span class="counts">${countDots(a.leaves)}<span class="chev">▶</span></span>
+    </div>
+    <div class="leaves">${[...a.leaves].sort((x,y)=>(y.anchor?1:0)-(x.anchor?1:0)||ORDER[y.st]-ORDER[x.st]).map(leafCard).join('')}</div>`;
+  road.appendChild(el);
+});
+const latBody = document.getElementById('latBody');
+LATERAL.forEach(grp=>{
+  const el = document.createElement('div'); el.className='lat-group';
+  el.innerHTML = `<h3>${grp.g}</h3><div class="lat-grid">${[...grp.leaves].sort((x,y)=>ORDER[y.st]-ORDER[x.st]).map(leafCard).join('')}</div>`;
+  latBody.appendChild(el);
+});
+document.getElementById('filters').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#filters button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  const f = b.dataset.f;
+  document.querySelectorAll('.leaf').forEach(l=>l.classList.toggle('dim', f!=='all' && l.dataset.st!==f));
+  if(f!=='all'){ document.querySelectorAll('.act').forEach(a=>a.classList.add('open')); document.getElementById('lateral').classList.add('open'); }
+});
+</script>
+</body>
+</html>
