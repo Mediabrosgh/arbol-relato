@@ -182,7 +182,7 @@
 /* hoja: {id, t, eje, int, ang, st, file?, fmt?, anchor?, proposed?, note?} */
 const ACTS = [
   { n:1, name:"Despertar", funnel:"TOFU",
-    sub:"El marketing de tu empresa no se delega a ciegas. Por qué tenés que involucrarte.",
+    sub:"El marketing de tu empresa es tuyo: por qué tenés que involucrarte, y qué pasa cuando dependés de quien no te muestra.",
     leaves:[
       {id:"037", file:"2026-06/guion-037-marketing-sin-depender.md", t:"Tu marketing, sin depender de nadie (y por qué ya no es opcional)", eje:"E15", int:"Contrarian", ang:"Opinión", st:"escrito", anchor:true, note:"ancla del Despertar: el guión que abre el viaje"},
       {id:"038", file:"2026-06/guion-038-marketing-infraestructura.md", t:"El marketing dejó de ser un gasto, es infraestructura", eje:"E15", int:"Contrarian", ang:"Opinión", st:"escrito"},
@@ -194,23 +194,17 @@ const ACTS = [
       {id:"043", file:"2026-06/guion-043-tercerizar-criterio.md", t:"Tercerizá la ejecución, no el criterio", eje:"E15", int:"Contrarian", ang:"Opinión", st:"escrito"},
       {id:"044", file:"2026-06/guion-044-una-persona-puede.md", t:"Hoy una persona puede con todo el marketing (IA + organización)", eje:"E15", int:"Contrarian", ang:"Contraintuitivo", st:"escrito"},
     ]},
-  { n:2, name:"La caja negra", funnel:"TOFU",
-    sub:"Qué pasa cuando dependés de alguien que no te muestra: no ves tu plata ni qué se hace.",
+  { n:2, name:"Querer ver claro", funnel:"MOFU",
+    sub:"Medición, números y tiempos: qué mirar para tomar vos las decisiones de tu marketing.",
     leaves:[
-      {id:"NUEVO", t:"Dependés de una agencia que no te muestra qué hace con tu plata", eje:"nuevo", int:"Dolor", ang:"Problema", st:"idea", proposed:true, anchor:true, note:"ancla de La caja negra · falta escribirla"},
-      {id:"NUEVO", t:"No sabés en qué se va el presupuesto de tu marketing", eje:"nuevo", int:"Dolor", ang:"Problema", st:"idea", proposed:true},
-      {id:"022→", file:"2026-05/guion-022-operacion-invisible.md", t:"Tu marketing no se nota… hasta que falla", eje:"E7", int:"Dolor", ang:"Problema", st:"idea", proposed:true, note:"reusar guion-022 reencuadrado a empresa"},
-    ]},
-  { n:3, name:"Querer ver claro", funnel:"MOFU",
-    sub:"Medición, números y reportes: qué mirar para tomar las decisiones vos.",
-    leaves:[
+      {id:"NUEVO", t:"No sabés en qué se va el presupuesto de tu marketing", eje:"E15", int:"Dolor", ang:"Problema", st:"idea", proposed:true},
       {id:"030", file:"2026-05/guion-030-looker-conectores.md", t:"Looker Studio y los conectores que nunca cargan", eje:"E7", int:"Dolor", ang:"Problema", st:"escrito", anchor:true},
       {id:"026", file:"2026-05/guion-026-reportes-dia-uno.md", t:"Antes los reportes tardaban hasta el día 10. Hoy, día 1", eje:"E7", int:"Educación", ang:"Resultado", st:"escrito", note:"reencuadrar de agencia→empresa"},
       {id:"032", file:"2026-05/guion-032-auto-budget.md", t:"Antes alguien revisaba presupuestos todos los días. Hoy no", eje:"E12", int:"Dolor", ang:"Problema", st:"escrito"},
       {id:"E13-02", t:"Los números que nadie te cuenta de tu propio marketing", eje:"E13", int:"Autoridad", ang:"Educativo", st:"idea"},
       {id:"IDEA-T", t:"Tiempos de referencia: cuánto dejar una campaña antes de tocarla y cuánto darle a una estrategia para probar", eje:"nuevo", int:"Educación", ang:"Educativo", st:"idea", note:"idea tuya · jun 2026 · revive el tema de los descartados 007/008 en clave empresa"},
     ]},
-  { n:4, name:"La IA a tu favor", funnel:"MOFU",
+  { n:3, name:"La IA a tu favor", funnel:"MOFU",
     sub:"Cómo usar IA para el marketing de tu empresa — por qué no alcanza suelta, cómo va potenciada en un sistema.",
     leaves:[
       {id:"033", file:"2026-05/guion-033-una-ia-no-alcanza.md", t:"Una IA no alcanza. No son iguales (Claude / GPT / Gemini)", eje:"E6", int:"Educación", ang:"Educativo", st:"escrito", anchor:true},
@@ -219,7 +213,7 @@ const ACTS = [
       {id:"E6-04", t:"La IA dentro de tu estrategia, no en paralelo", eje:"E6", int:"Educación", ang:"Educativo", st:"idea"},
       {id:"E6-07", t:"MB Suite como el lugar donde la IA tiene tu contexto", eje:"E6", int:"Educación", ang:"Educativo", st:"idea"},
     ]},
-  { n:5, name:"Todo en un solo lugar", funnel:"BOFU",
+  { n:4, name:"Todo en un solo lugar", funnel:"BOFU",
     sub:"Paid media, CRM, SEO, redes, email, reportes — sin fricción y sin 10 herramientas. Tu prueba: los 🖥 demos.",
     leaves:[
       {id:"014", file:"2026-05/guion-014-cinco-herramientas-vs-una.md", t:"5 herramientas vs 1: el ahorro real ($653/mes)", eje:"E5", int:"Contrarian", ang:"Contraintuitivo", st:"grabado", anchor:true},
@@ -231,7 +225,7 @@ const ACTS = [
       {id:"E5-01", t:"El costo oculto de tener las herramientas dispersas", eje:"E5", int:"Dolor", ang:"Problema", st:"idea"},
       {id:"E5-03", t:"El dato que entra una vez y se replica solo", eje:"E5", int:"Educación", ang:"Proceso", st:"idea"},
     ]},
-  { n:6, name:"Dueño de tu marketing", funnel:"BOFU",
+  { n:5, name:"Dueño de tu marketing", funnel:"BOFU",
     sub:"Lo manejás vos, con claridad, sin depender de nadie. → demo + trial de 14 días.",
     leaves:[
       {id:"E11-02", t:"No necesitás una agencia: necesitás un sistema", eje:"E11", int:"Contrarian", ang:"Opinión", st:"idea", anchor:true, note:"ancla de Dueño de tu marketing · falta escribirla"},
